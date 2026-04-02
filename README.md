@@ -1,19 +1,17 @@
 # 🚀 AWS Dockerized API
 
-Proyecto enfocado en construir, optimizar y distribuir una API containerizada siguiendo buenas prácticas de DevOps y cloud.
+Proyecto enfocado en containerizar una API simple y subir una imagen optimizada a AWS ECR siguiendo buenas prácticas de DevOps.
 
 ---
 
 ## 🧠 Objetivo
 
-Containerizar una API simple y prepararla para entornos reales en la nube.
+Construir una imagen Docker que sea:
 
-Este proyecto busca:
-
-* Crear una API mínima pero profesional
-* Construir una imagen Docker eficiente
-* Versionar la imagen correctamente
-* Prepararla para ser subida a un registry (AWS ECR)
+* Liviana
+* Reproducible
+* Sin secretos embebidos
+* Lista para ser utilizada en entornos cloud
 
 ---
 
@@ -21,19 +19,17 @@ Este proyecto busca:
 
 * Node.js (Express)
 * Docker
-* AWS (ECR en siguientes fases)
+* AWS ECR
 
 ---
 
 ## 📁 Estructura del proyecto
 
 ```
-aws-dockerized-api/
-│
+.
 ├── app/
-│   ├── package.json
-│   └── index.js
-│
+│   ├── index.js
+│   └── package.json
 ├── Dockerfile
 ├── .dockerignore
 └── README.md
@@ -43,9 +39,8 @@ aws-dockerized-api/
 
 ## ⚙️ Funcionalidades
 
-* API HTTP básica
-* Endpoint `/` (respuesta simple)
-* Endpoint `/health` (healthcheck para cloud)
+* Endpoint `/` (respuesta básica)
+* Endpoint `/health` (healthcheck)
 * Logs estructurados en JSON
 * Uso de variables de entorno
 
@@ -65,52 +60,50 @@ docker build -t dockerized-api:v1 .
 docker run -p 3000:3000 dockerized-api:v1
 ```
 
-Endpoints:
+Endpoints disponibles:
 
-* [http://localhost:3000](http://localhost:3000)
-* [http://localhost:3000/health](http://localhost:3000/health)
+* http://localhost:3000
+* http://localhost:3000/health
+
+---
+
+## ☁️ Subida a AWS ECR
+
+```bash
+# Login
+aws ecr get-login-password --region sa-east-1 | \
+docker login --username AWS --password-stdin <account-id>.dkr.ecr.sa-east-1.amazonaws.com
+
+# Tag
+docker tag dockerized-api:v1 <account-id>.dkr.ecr.sa-east-1.amazonaws.com/dockerized-api:v1
+
+# Push
+docker push <account-id>.dkr.ecr.sa-east-1.amazonaws.com/dockerized-api:v1
+```
 
 ---
 
 ## 🧠 Buenas prácticas aplicadas
 
-### 🔹 Imagen liviana
-
-* Uso de `node:alpine`
+* Imagen base liviana (`node:alpine`)
 * Uso de `.dockerignore`
-
-### 🔹 Builds eficientes
-
-* Separación de dependencias (`package.json`) para aprovechar cache
-
-### 🔹 Seguridad
-
-* No se incluyen secretos en la imagen
-* Uso de variables de entorno
+* Optimización de cache (dependencias separadas)
 * Ejecución como usuario no root
-
-### 🔹 Observabilidad
-
+* Sin credenciales en la imagen
 * Logs estructurados en JSON
-* Endpoint de healthcheck para monitoreo
+* Endpoint `/health` para monitoreo
 
 ---
 
-## 🚫 Consideraciones
+## 📦 Resultado
 
-* No incluir credenciales en el código
-* Mantener la imagen lo más pequeña posible
-* Evitar dependencias innecesarias
+Imagen Docker versionada (`v1`) almacenada en AWS ECR, lista para ser utilizada en despliegues cloud.
 
 ---
 
-## 📦 Próximos pasos
+## 🎯 Aprendizajes
 
-* Subir la imagen a AWS ECR
-* Versionado de imágenes (v1, v2, latest)
-
----
-
-## 🎯 Objetivo final
-
-Construir una base sólida para aplicaciones cloud-native, siguiendo prácticas reales utilizadas en entornos profesionales.
+* Construcción y optimización de imágenes Docker
+* Uso de registries (ECR)
+* Flujo real: build → tag → push
+* Buenas prácticas de contenedores en cloud
