@@ -108,8 +108,6 @@ Endpoints:
 
 * Subir la imagen a AWS ECR
 * Versionado de imágenes (v1, v2, latest)
-* Integración con CI/CD
-* Deploy en contenedores (ECS / Fargate)
 
 ---
 
