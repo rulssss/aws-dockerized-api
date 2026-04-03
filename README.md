@@ -29,6 +29,7 @@ Construir una imagen Docker que sea:
 .
 ├── app/
 │   ├── index.js
+│   ├── db.js
 │   └── package.json
 ├── Dockerfile
 ├── .dockerignore
