@@ -83,6 +83,18 @@ docker push <account-id>.dkr.ecr.sa-east-1.amazonaws.com/dockerized-api:v1
 
 ---
 
+## 🗄️ Database
+
+This project integrates with AWS DynamoDB.
+
+Table:
+- name: tasks
+- primary key: id (string)
+
+Endpoints:
+- POST /tasks → create task
+- GET /tasks → list tasks
+
 ## 🧠 Buenas prácticas aplicadas
 
 * Imagen base liviana (`node:alpine`)
