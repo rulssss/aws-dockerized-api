@@ -1,17 +1,17 @@
 # 🚀 AWS Dockerized API
 
-Proyecto enfocado en containerizar una API simple y subir una imagen optimizada a AWS ECR siguiendo buenas prácticas de DevOps.
+Project focused on containerizing a simple API and pushing an optimized image to AWS ECR following DevOps best practices.
 
 ---
 
-## 🧠 Objetivo
+## 🧠 Objective
 
-Construir una imagen Docker que sea:
+Build a Docker image that is:
 
-* Liviana
+* Lightweight
 * Reproducible
-* Sin secretos embebidos
-* Lista para ser utilizada en entornos cloud
+* Free of embedded secrets
+* Ready for cloud environments
 
 ---
 
@@ -23,13 +23,12 @@ Construir una imagen Docker que sea:
 
 ---
 
-## 📁 Estructura del proyecto
+## 📁 Project Structure
 
 ```
 .
 ├── app/
 │   ├── index.js
-│   ├── db.js
 │   └── package.json
 ├── Dockerfile
 ├── .dockerignore
@@ -38,16 +37,16 @@ Construir una imagen Docker que sea:
 
 ---
 
-## ⚙️ Funcionalidades
+## ⚙️ Features
 
-* Endpoint `/` (respuesta básica)
-* Endpoint `/health` (healthcheck)
-* Logs estructurados en JSON
-* Uso de variables de entorno
+* `/` endpoint (basic response)
+* `/health` endpoint (health check)
+* Structured JSON logs
+* Environment variables support
 
 ---
 
-## 🐳 Build de la imagen
+## 🐳 Build Image
 
 ```bash
 docker build -t dockerized-api:v1 .
@@ -55,20 +54,20 @@ docker build -t dockerized-api:v1 .
 
 ---
 
-## ▶️ Ejecutar localmente
+## ▶️ Run Locally
 
 ```bash
 docker run -p 3000:3000 dockerized-api:v1
 ```
 
-Endpoints disponibles:
+Available endpoints:
 
 * http://localhost:3000
 * http://localhost:3000/health
 
 ---
 
-## ☁️ Subida a AWS ECR
+## ☁️ Push to AWS ECR
 
 ```bash
 # Login
@@ -89,34 +88,97 @@ docker push <account-id>.dkr.ecr.sa-east-1.amazonaws.com/dockerized-api:v1
 This project integrates with AWS DynamoDB.
 
 Table:
-- name: tasks
-- primary key: id (string)
+
+* name: tasks
+* primary key: id (string)
 
 Endpoints:
-- POST /tasks → create task
-- GET /tasks → list tasks
 
-## 🧠 Buenas prácticas aplicadas
-
-* Imagen base liviana (`node:alpine`)
-* Uso de `.dockerignore`
-* Optimización de cache (dependencias separadas)
-* Ejecución como usuario no root
-* Sin credenciales en la imagen
-* Logs estructurados en JSON
-* Endpoint `/health` para monitoreo
+* POST /tasks → create task
+* GET /tasks → list tasks
 
 ---
 
-## 📦 Resultado
+## 🏗 Architecture
 
-Imagen Docker versionada (`v1`) almacenada en AWS ECR, lista para ser utilizada en despliegues cloud.
+Client → ALB → ECS Fargate → Container (Node.js API) → DynamoDB
 
 ---
 
-## 🎯 Aprendizajes
+## ☁️ AWS Services Used
 
-* Construcción y optimización de imágenes Docker
-* Uso de registries (ECR)
-* Flujo real: build → tag → push
-* Buenas prácticas de contenedores en cloud
+* ECS (Fargate)
+* ECR
+* Application Load Balancer
+* DynamoDB
+* IAM
+* CloudWatch Logs
+
+---
+
+## 🌐 Public Endpoints
+
+* GET /health → returns service status
+* GET /tasks → list tasks
+* POST /tasks → create task
+
+---
+
+## 🔐 Security
+
+* No secrets in code
+* IAM roles for access (Task Role)
+* Security Groups configured with least privilege
+
+---
+
+## 🚀 Deployment
+
+1. Build Docker image
+2. Push to ECR
+3. Update ECS Service
+4. Force new deployment
+
+---
+
+## 🧠 Best Practices Applied
+
+* Lightweight base image (`node:alpine`)
+* Use of `.dockerignore`
+* Layer caching optimization (dependencies separated)
+* Non-root user execution
+* No credentials inside the image
+* Structured JSON logging
+* `/health` endpoint for monitoring
+
+---
+
+## 💰 Cost Control
+
+* Fargate tasks scaled to minimum (1 task)
+* DynamoDB in on-demand mode
+* Resources stopped when not in use
+
+---
+
+## 📦 Result
+
+Versioned Docker image (`v1`) stored in AWS ECR, ready for cloud deployments.
+
+---
+
+## 🎯 Learnings
+
+* Docker image building and optimization
+* Working with container registries (ECR)
+* Real-world workflow: build → tag → push
+* Cloud container best practices
+
+---
+
+## 🧠 Lessons Learned
+
+* Difference between Task Role and Execution Role
+* Debugging ALB health checks
+* Handling multi-architecture Docker images (ARM vs AMD64)
+* Networking issues with Security Groups
